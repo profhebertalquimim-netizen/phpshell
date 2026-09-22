@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # Servidor Web + PHP (com drivers MySQL, Postgres e SQLite)
+  web:
+    build: .
+    container_name: aula_php_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+    restart: always
+
+  # Banco de Dados MySQL
+  mysql_db:
+    image: mysql:8.0
+    container_name: aula_mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: meubanco_mysql
+      MYSQL_USER: aluno
+      MYSQL_PASSWORD: alunopassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  # Banco de Dados PostgreSQL
+  postgres_db:
+    image: postgres:15
+    container_name: aula_postgres_db
+    environment:
+      POSTGRES_DB: meubanco_postgres
+      POSTGRES_USER: aluno
+      POSTGRES_PASSWORD: alunopassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  # phpMyAdmin (Interface para MySQL)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: aula_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql_db
+      MYSQL_ROOT_PASSWORD: rootpassword
+    restart: always
+
+  # Adminer (Interface unificada: MySQL, PostgreSQL e SQLite)
+  adminer:
+    image: adminer
+    container_name: aula_adminer
+    ports:
+      - "8082:80"
+    restart: always
+
+volumes:
+  mysql_data:
+  postgres_data:
