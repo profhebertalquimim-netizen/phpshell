@@ -4,5 +4,5 @@
 
 1. Clone este repositório no seu Cloud Shell:
    ```bash
-   git clone [<URL_DO_SEU_REPOSITORIO>](https://github.com/profhebertalquimim-netizen/phpshell.git)
+   git clone https://github.com/profhebertalquimim-netizen/phpshell.git
    cd phpshell
