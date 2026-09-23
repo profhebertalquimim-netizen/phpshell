@@ -1,5 +1,5 @@
 services:
-  # Servidor Web + PHP (com drivers MySQL, Postgres e SQLite)
+  # 1. Servidor Web + PHP
   web:
     build: .
     container_name: aula_php_web
@@ -7,12 +7,11 @@ services:
       - "8080:80"
     volumes:
       - ./src:/var/www/html
-    # Comando executado ao iniciar para garantir permissões totais de escrita na pasta src
     command: >
       sh -c "chmod -R 777 /var/www/html && apache2-foreground"
     restart: always
 
-  # Banco de Dados MySQL
+  # 2. Banco de Dados MySQL
   mysql_db:
     image: mysql:8.0
     container_name: aula_mysql_db
@@ -25,7 +24,7 @@ services:
       - mysql_data:/var/lib/mysql
     restart: always
 
-  # Banco de Dados PostgreSQL
+  # 3. Banco de Dados PostgreSQL
   postgres_db:
     image: postgres:15
     container_name: aula_postgres_db
@@ -37,7 +36,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
-  # phpMyAdmin (Interface para MySQL)
+  # 4. phpMyAdmin (Interface para MySQL)
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: aula_phpmyadmin
@@ -48,9 +47,32 @@ services:
       MYSQL_ROOT_PASSWORD: rootpassword
     restart: always
 
-  # Adminer (Interface unificada: MySQL, PostgreSQL e SQLite)
+  # 5. pgAdmin (Interface dedicada para PostgreSQL)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: aula_pgadmin
+    ports:
+      - "8083:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: aluno@aula.com
+      PGADMIN_DEFAULT_PASSWORD: alunopassword
+    restart: always
+
+  # 6. SQLite Web (Interface dedicada para SQLite)
+  sqliteweb:
+    image: coleifer/sqlite-web
+    container_name: aula_sqliteweb
+    ports:
+      - "8084:8080"
+    volumes:
+      - ./src:/db
+    environment:
+      SQLITE_DATABASE: database.sqlite
+    restart: always
+
+  # 7. Adminer (Gerenciador Universal)
   adminer:
-    image: adminer
+    image: dockette/adminer
     container_name: aula_adminer
     ports:
       - "8082:80"
