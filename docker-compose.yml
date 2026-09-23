@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Servidor Web + PHP (com drivers MySQL, Postgres e SQLite)
   web:
@@ -9,6 +7,9 @@ services:
       - "8080:80"
     volumes:
       - ./src:/var/www/html
+    # Comando executado ao iniciar para garantir permissões totais de escrita na pasta src
+    command: >
+      sh -c "chmod -R 777 /var/www/html && apache2-foreground"
     restart: always
 
   # Banco de Dados MySQL
